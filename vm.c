@@ -411,6 +411,7 @@ int run() {
 }
 
 int main(int argc, char** argv) {
+    const char* fname = "sandmark.umz";
 #if DEBUG
     int opt;
     while ((opt = getopt(argc, argv, "dvo")) != -1) {
@@ -423,11 +424,13 @@ int main(int argc, char** argv) {
             exit(EXIT_FAILURE);
         }
     }
-#endif
 
-    const char* fname = "sandmark.umz";
     if (optind < argc)
         fname = argv[optind];
+#else
+    if (argc > 1)
+      fname = argv[1];
+#endif
 
     info("Starting VM");
     mem_init();
