@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors
 
-ASSETS = umspec.txt codex.umz sandmark.umz um.um
+ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 
 .PHONY: default clean tidy solve
 
@@ -10,13 +10,17 @@ $(ASSETS):
 	curl http://www.boundvariable.org/$@ -o $@
 
 clean:
-	rm -f vm vmd codex.out codex.um solution.pp *~
+	rm -f vm vmd *.out *.um solution.pp *~
 
 tidy: clean
 	rm -f $(ASSETS)
 
-sandmark: vm sandmark.umz
-	time -v ./vm sandmark.umz > /dev/null
+sandmark.out: sandmark.umz vm
+	@echo "running sandmark ..."
+	time -v ./vm $< > $@
+
+sandmark: sandmark.out sandmark-output.txt
+	@diff $^
 
 vm: vm.c
 	gcc -DNDEBUG -Ofast $(CFLAGS) -o $@ $^
