@@ -38,7 +38,7 @@ codex.um: codex.out
         # remove comments
 	@grep -v "^#.*" < $^ > $@
 
-solve: vm codex.um solution.pp
+solve: vm codex.um solution.pp sandmark
 	./vm codex.um < solution.pp
 
 adventure: vm codex.um adventure.pp
