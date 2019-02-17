@@ -1,7 +1,5 @@
-um.um
-codex.um
-codex.umz
-sandmark.umz
-codex.out
+*.um
+*.umz
+*.out
 vm
 vmd
