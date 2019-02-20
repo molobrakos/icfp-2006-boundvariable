@@ -2,7 +2,7 @@ CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors
 
 ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 
-.PHONY: default clean tidy solve
+.PHONY: default clean realclean solve
 
 default: solve
 
@@ -12,7 +12,7 @@ $(ASSETS):
 clean:
 	rm -f vm vmd *.out *.um solution.pp *~
 
-tidy: clean
+realclean: clean
 	rm -f $(ASSETS)
 
 sandmark.out: sandmark.umz vm
