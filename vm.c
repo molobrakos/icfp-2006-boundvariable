@@ -127,17 +127,18 @@ static uint32_t mem_find_free_item() {
     return candidate;
 }
 
-static uint32_t mem_alloc(uint32_t len) {
-    int idx = mem_find_free_item(len);
-
-    assert(idx != 0);
-
+static void mem_alloc_at(uint32_t idx, uint32_t len) {
     mem_ensure(idx, len);
 
     mem[idx].len = len;
     mem[idx].use = 1;
     memset(mem[idx].buf, 0, byte_size(mem[idx].len));
+}
 
+static uint32_t mem_alloc(uint32_t len) {
+    int idx = mem_find_free_item(len);
+    assert(idx != 0);
+    mem_alloc_at(idx, len);
     return idx;
 }
 
@@ -188,9 +189,7 @@ static void load(const char* fname) {
 
     uint32_t len = byte_size / sizeof(uint32_t);
 
-    mem_ensure(0, len);
-    mem[0].len = len;
-    mem[0].use = 1;
+    mem_alloc_at(0, len);
 
     size_t res = fread(mem[0].buf, 4, len, fp);
     res = res;
