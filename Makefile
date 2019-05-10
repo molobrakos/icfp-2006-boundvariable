@@ -7,7 +7,7 @@ ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 default: solve
 
 $(ASSETS):
-	curl http://www.boundvariable.org/$@ -o $@
+	curl -s http://www.boundvariable.org/$@ -o $@
 
 clean:
 	rm -f vm vmd *.out *.um solution.pp *~
