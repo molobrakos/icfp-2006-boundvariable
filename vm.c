@@ -8,8 +8,6 @@
 #include <unistd.h>
 #include <assert.h>
 
-typedef uint32_t uint32;
-
 #if DEBUG
 static int verbosity = 0;
 
@@ -54,24 +52,24 @@ inline static void info(const char* format, ...) {
 */
 
 #ifndef NDEBUG
-static const uint32 MAX_ALLOC_SIZE = (1<<24) - 1; // 16MB items per block
+static const uint32_t MAX_ALLOC_SIZE = (1<<24) - 1; // 16MB items per block
 #endif
 
 typedef struct {
-    uint32* buf;
-    uint32 size:24; /* size of buffer in items */
-    uint32 len:24;  /* number of actual items in array */
-    uint32 use:1;
+    uint32_t* buf;
+    uint32_t size:24; /* size of buffer in items */
+    uint32_t len:24;  /* number of actual items in array */
+    uint32_t use:1;
 } mem_t;
 
 static mem_t* mem = NULL;
-static uint32 mem_size = 0;
+static uint32_t mem_size = 0;
 
-static inline size_t byte_size(uint32 len) {
-    return sizeof(uint32) * len;
+static inline size_t byte_size(uint32_t len) {
+    return sizeof(uint32_t) * len;
 }
 
-static void mem_resize_buf(uint32 id, uint32 size) {
+static void mem_resize_buf(uint32_t id, uint32_t size) {
     assert(byte_size(size) <= MAX_ALLOC_SIZE);
 
     mem[id].size = size;
@@ -85,7 +83,7 @@ static void mem_resize_buf(uint32 id, uint32 size) {
     }
 }
 
-static void mem_heap_grow(uint32 new_size) {
+static void mem_heap_grow(uint32_t new_size) {
     assert(new_size != 0 || mem_size != 0);
 
     // 0 means just double the current size
@@ -95,7 +93,7 @@ static void mem_heap_grow(uint32 new_size) {
     mem = realloc(mem, new_size * sizeof(mem_t));
     assert(mem);
 
-    for (uint32 i = mem_size; i<new_size; i++) {
+    for (uint32_t i = mem_size; i<new_size; i++) {
         mem[i].use = 0;
         mem[i].len = 0;
         mem[i].size = 0;
@@ -114,20 +112,20 @@ static void mem_init() {
 }
 
 static void mem_cleanup() {
-    for (uint32 i = 0; i<mem_size; i++)
+    for (uint32_t i = 0; i<mem_size; i++)
         if (mem[i].size && mem[i].buf)
             free(mem[i].buf);
     free(mem);
 }
 
-static void mem_ensure(int id, uint32 size) {
+static void mem_ensure(int id, uint32_t size) {
     if (size > mem[id].size)
         mem_resize_buf(id, size);
 }
 
-static uint32 candidate = 0;
+static uint32_t candidate = 0;
 
-static void mem_free(uint32 id) {
+static void mem_free(uint32_t id) {
     assert(id != 0);
     assert(mem[id].use);
     debug("Freeing mem at %d", id);
@@ -137,7 +135,7 @@ static void mem_free(uint32 id) {
     candidate = id;
 }
 
-static uint32 mem_find_free_item() {
+static uint32_t mem_find_free_item() {
     for (unsigned i = 0; i < mem_size; i++) {
         if (!mem[candidate].use) {
             return candidate;
@@ -152,7 +150,7 @@ static uint32 mem_find_free_item() {
     return candidate;
 }
 
-static uint32 mem_alloc(uint32 len) {
+static uint32_t mem_alloc(uint32_t len) {
     int idx = mem_find_free_item(len);
 
     assert(idx != 0);
@@ -166,7 +164,7 @@ static uint32 mem_alloc(uint32 len) {
     return idx;
 }
 
-static inline uint32* mem_get_buf(uint32 id, uint32 offset) {
+static inline uint32_t* mem_get_buf(uint32_t id, uint32_t offset) {
     assert(id < mem_size);
 
     mem_t item = mem[id];
@@ -179,11 +177,11 @@ static inline uint32* mem_get_buf(uint32 id, uint32 offset) {
     return &item.buf[offset];
 }
 
-static inline uint32 mem_get(uint32 id, uint32 offset) {
+static inline uint32_t mem_get(uint32_t id, uint32_t offset) {
     return *(mem_get_buf(id, offset));
 }
 
-static inline void mem_set(uint32 id, uint32 offset, uint32 val) {
+static inline void mem_set(uint32_t id, uint32_t offset, uint32_t val) {
     *(mem_get_buf(id, offset)) = val;
 }
 
@@ -193,7 +191,7 @@ static inline void mem_set(uint32 id, uint32 offset, uint32 val) {
    --------------------------------------------------------------------------------------
 */
 
-static void swap_byte_order(uint32* buf, size_t size) {
+static void swap_byte_order(uint32_t* buf, size_t size) {
     while (size--) {
         *buf = __bswap_32(*buf);
         buf++;
@@ -211,7 +209,7 @@ static void load(const char* fname) {
     assert(byte_size % 4 == 0);
     rewind(fp);
 
-    uint32 len = byte_size / sizeof(uint32);
+    uint32_t len = byte_size / sizeof(uint32_t);
 
     mem_ensure(0, len);
     mem[0].len = len;
@@ -225,7 +223,7 @@ static void load(const char* fname) {
     info("Loaded program %s (%d/%x items, %d bytes) into memory", fname, len, len, byte_size);
 }
 
-static void load_program(uint32 id) {
+static void load_program(uint32_t id) {
     if (id == 0)
         return;
 
@@ -247,8 +245,8 @@ static void load_program(uint32 id) {
    --------------------------------------------------------------------------------------
 */
 
-static uint32 reg[]  = {0,0,0,0,0,0,0,0};
-static uint32 ip = 0;
+static uint32_t reg[]  = {0,0,0,0,0,0,0,0};
+static uint32_t ip = 0;
 
 enum {
     MOV = 0,
@@ -268,22 +266,22 @@ enum {
 };
 
 #if DEBUG
-void print_state(uint32 ip) {
+void print_state(uint32_t ip) {
 
-    static uint32 instr_count = 0;
+    static uint32_t instr_count = 0;
 
     static const char* STR_OP[] = {
         "mov", "get", "set", "add", "mul", "div", "nand",
         "halt", "allo", "del", "out", "in", "load", "orto"
     };
 
-    uint32 instr = mem[0].buf[ip];
-    uint32 op = instr;
-    uint32 C = op & 0x7;
+    uint32_t instr = mem[0].buf[ip];
+    uint32_t op = instr;
+    uint32_t C = op & 0x7;
     op >>= 3;
-    uint32 B = op & 0x7;
+    uint32_t B = op & 0x7;
     op >>= 3;
-    uint32 A = op & 0x7;
+    uint32_t A = op & 0x7;
     op >>= 3;
     op >>= 19;
 
@@ -294,7 +292,7 @@ void print_state(uint32 ip) {
             op, STR_OP[op]);
 
     if (op == ORTO) {
-        uint32 val = instr & 0x1ffffff;
+        uint32_t val = instr & 0x1ffffff;
         A = (instr >> 25) & 0x7;
         fprintf(stderr,
                 "|%01x|     "
@@ -319,9 +317,9 @@ void print_state(uint32 ip) {
 int run() {
     info("Running");
 
-    uint32 instr;
-    uint32 A, B, C;
-    uint32 op;
+    uint32_t instr;
+    uint32_t A, B, C;
+    uint32_t op;
     int ch;
 
     while (1) {
@@ -392,7 +390,7 @@ int run() {
         case INP:
             ch = getchar();
             assert(ch == EOF || ch <= 255);
-            reg[C] = (ch == EOF ? 0xffffffff : (uint32)ch);
+            reg[C] = (ch == EOF ? 0xffffffff : (uint32_t)ch);
             break;
         case LOAD:
             ip = reg[C];
