@@ -8,22 +8,10 @@
 #include <unistd.h>
 #include <assert.h>
 
-#if DEBUG
 static int verbosity = 0;
 
-static const int VERBOSITY_DEBUG = 1<<0;
-static const int VERBOSITY_INFO = 1<<1;
-static const int VERBOSITY_OP = 1<<2;
-
-inline static void debug(const char* format, ...) {
-    if (!(verbosity & VERBOSITY_DEBUG))
-        return;
-    va_list args;
-    va_start (args, format);
-    vfprintf(stderr, format, args);
-    va_end (args);
-    fprintf(stderr, "\n");
-}
+#define VERBOSITY_INFO 1<<1
+#define VERBOSITY_DEBUG 1<<2
 
 inline static void info(const char* format, ...) {
     if (!(verbosity & VERBOSITY_INFO))
@@ -35,15 +23,6 @@ inline static void info(const char* format, ...) {
     va_end(args);
     fprintf(stderr, "\n");
 }
-#else
-inline static void debug(const char* format, ...) {
-    format = format;
-}
-
-inline static void info(const char* format, ...) {
-    format = format;
-}
-#endif
 
 /*
    --------------------------------------------------------------------------------------
@@ -51,9 +30,8 @@ inline static void info(const char* format, ...) {
    --------------------------------------------------------------------------------------
 */
 
-#ifndef NDEBUG
-static const uint32_t MAX_ALLOC_SIZE = (1<<24) - 1; // 16MB items per block
-#endif
+#define MAX_ALLOC_SIZE ((1<<24) - 1) // 16MB items per block
+
 
 typedef struct {
     uint32_t* buf;
@@ -128,7 +106,6 @@ static uint32_t candidate = 0;
 static void mem_free(uint32_t id) {
     assert(id != 0);
     assert(mem[id].use);
-    debug("Freeing mem at %d", id);
     mem_resize_buf(id, 0);
     mem[id].len = 0;
     mem[id].use = 0;
@@ -265,7 +242,6 @@ enum {
     ORTO = 13,
 };
 
-#if DEBUG
 void print_state(uint32_t ip) {
 
     static uint32_t instr_count = 0;
@@ -312,7 +288,7 @@ void print_state(uint32_t ip) {
             reg[0], reg[1], reg[2], reg[3],
             reg[4], reg[5], reg[6], reg[7]);
 }
-#endif
+
 
 int run() {
     info("Running");
@@ -341,7 +317,7 @@ int run() {
         op >>= 19;
 
 #if DEBUG
-        if (verbosity & VERBOSITY_OP)
+        if (verbosity & VERBOSITY_DEBUG)
             print_state(ip);
 #endif
 
@@ -413,9 +389,8 @@ int main(int argc, char** argv) {
     int opt;
     while ((opt = getopt(argc, argv, "dvo")) != -1) {
         switch (opt) {
-        case 'd': verbosity |= (VERBOSITY_DEBUG | VERBOSITY_INFO); break;
+        case 'd': verbosity |= VERBOSITY_DEBUG; break;
         case 'v': verbosity |= VERBOSITY_INFO; break;
-        case 'o': verbosity |= VERBOSITY_OP; break;
         default:
             printf("Usage: %s [-d] [-v] [-o] [file]\n", argv[0]);
             exit(EXIT_FAILURE);
