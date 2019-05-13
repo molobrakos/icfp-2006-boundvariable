@@ -2,6 +2,8 @@ CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors
 
 ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 
+VM = ./vm codex.um
+
 .PHONY: default
 default: solve
 
@@ -10,7 +12,7 @@ $(ASSETS):
 
 .PHONY: clean
 clean:
-	rm -f vm vmd *.out *.um solution.pp *~
+	rm -f vm vmd *.out *.um *~
 
 .PHONY: realclean
 ealclean: clean
@@ -30,27 +32,27 @@ vm: vm.c
 vmd: vm.c
 	gcc -DDEBUG -Og -g $(CFLAGS) -o $@ $^
 
-codex.out: vm codex.umz key
-	./vm codex.umz < key > $@
+codex.um: vm codex.umz key
+	./vm codex.umz < key | dd skip=195 iflag=skip_bytes > $@
 
-codex.um: codex.out
-	@dd skip=195 iflag=skip_bytes 2>/dev/null < $^ > $@
+.PHONT: basic
+basic: basic.script hack.bas $(VM)
+	cat $< | ./pp | $(VM)
 
-%.pp: %.txt
-        # remove comments
-	@grep -v "^#.*" < $^ > $@
-
-.PHONY: solve
-solve: vm codex.um solution.pp sandmark
-	./vm codex.um < solution.pp
+.PHONY: crack
+crack:
+	make basic | grep "^!!! cracked"
 
 .PHONY: adventure
-adventure: vm codex.um adventure.pp
-	@./vm codex.um < adventure.pp
+adventure: adventure.script $(VM)
+	cat $< | ./pp | $(VM)
 
-.PHONY: 2d
-2d: vm codex.um 2d.pp
-	@./vm codex.um < 2d.pp
+.PHONY: adventure
+2d: 2d.script $(VM)
+	cat $< | ./pp | $(VM)
+
+.PHONY: solve
+solve: basic adventure 2d
 
 .PHONY: run
 run:
