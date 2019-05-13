@@ -3,6 +3,8 @@ CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors
 ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 
 VM = ./vm codex.um
+PREPROCESS = ./preprocess
+
 
 .PHONY: default
 default: solve
@@ -37,7 +39,7 @@ codex.um: vm codex.umz key
 
 .PHONT: basic
 basic: basic.script hack.bas $(VM)
-	cat $< | ./pp | $(VM)
+	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: crack
 crack:
@@ -45,11 +47,11 @@ crack:
 
 .PHONY: adventure
 adventure: adventure.script $(VM)
-	cat $< | ./pp | $(VM)
+	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: adventure
 2d: 2d.script $(VM)
-	cat $< | ./pp | $(VM)
+	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: solve
 solve: basic adventure 2d
