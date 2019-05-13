@@ -1,0 +1,80 @@
+howie
+xyzzy
+
+# keypad + button + (motherboar + (A-1920-IXB + transistor) + screw)
+# (radio + antenna + transistor)
+# (processor + cache) + bolt
+
+cat README
+
+adventure
+examine manifesto
+examine pamphlet
+north
+take bolt
+take spring
+take button
+take processor
+take pill
+take radio
+incinerate pill
+
+# ADVTR.INC=5@999999|f95731ab88952dfa4cb326fb99c085f
+
+take cache
+combine processor and cache
+
+# ADVTR.CMB=5@999999|764e8a851411c66106e130374d8abbb
+
+take blue transistor
+inventory
+look
+examine blue transistor
+inv
+incinerate spring
+take antenna
+combine radio and antenna
+take screw
+examine screw
+drop screw
+take motherboard
+examine motherboard
+combine motherboard and screw
+take A-1920-IXB
+combine A-1920-IXB and processor
+combine A-1920-IXB and bolt
+look
+take red transistor
+combine radio and red transistor
+examine radio
+use radio
+take keypad
+examine keypad
+combine keypad and button
+combine keypad and motherboard
+examine A-1920-IXB
+take keypad
+use keypad
+examine keypad
+take trash
+help
+
+wait
+
+#tere is a bolt here.
+
+#Underneath the bolt, there is a spring.
+#Underneath the spring, there is a button.
+#Underneath the button, there is a (broken) processor.
+#Underneath the processor, there is a red pill.
+#Underneath the pill, there is a (broken) radio.
+#Underneath the radio, there is a cache.
+#Underneath the cache, there is a blue transistor.
+#Underneath the transistor, there is an antenna.
+#Underneath the antenna, there is a screw.
+#Underneath the screw, there is a (broken) motherboard.
+#Underneath the motherboard, there is a (broken) A-1920-IXB.
+#Underneath the A-1920-IXB, there is a red transistor.
+#Underneath the transistor, there is a (broken) keypad.
+#Underneath the keypad, there is some trash.
+
