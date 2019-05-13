@@ -54,6 +54,10 @@ adventure: adventure.script $(VM)
 .PHONY: solve
 solve: basic adventure 2d
 
+.PHONY: cookies
+cookies:
+	make | grep '^\w\{5\}\.\w\{3\}='
+
 .PHONY: run
 run:
 	./vm codex.um
