@@ -2,7 +2,7 @@ CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors
 
 ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 
-VM = ./vm codex.um
+VM = ./vm -e codex.um
 PREPROCESS = ./preprocess
 
 
@@ -38,7 +38,7 @@ codex.um: vm codex.umz key
 	./vm codex.umz < key | dd skip=195 iflag=skip_bytes > $@
 
 .PHONT: basic
-basic: basic.script hack.bas $(VM)
+basic: basic.script hack.bas vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: crack
@@ -46,19 +46,27 @@ crack:
 	make basic | grep "^!!! cracked"
 
 .PHONY: adventure
-adventure: adventure.script $(VM)
+adventure: adventure.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: adventure
-2d: 2d.script $(VM)
+2d: 2d.script vm codex.um
+	cat $< | $(PREPROCESS) | $(VM)
+
+.PHONY: certify
+certify: certify.script vm codex.um
+	cat $< | $(PREPROCESS) | $(VM)
+
+.PHONY: advice
+advise: advise.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: solve
-solve: basic adventure 2d
+solve: basic adventure 2d certify advise
 
 .PHONY: cookies
 cookies:
-	make | grep '^\w\{5\}\.\w\{3\}='
+	make | grep '\w\{5\}\.\w\{3\}='
 
 .PHONY: run
 run:
