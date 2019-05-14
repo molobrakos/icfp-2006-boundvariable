@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors
+CFLAGS=-Wall -Wextra -Werror -pedantic -pedantic-errors -std=c99
 
 ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 
