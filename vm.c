@@ -7,6 +7,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <assert.h>
+#include <getopt.h>
 
 static int verbosity = 0;
 static int echo = 0;
@@ -387,6 +388,7 @@ int run() {
 }
 
 int main(int argc, char** argv) {
+    const char* fname = "sandmark.umz";
     int opt;
     while ((opt = getopt(argc, argv, "dve")) != -1) {
         switch (opt) {
@@ -401,10 +403,6 @@ int main(int argc, char** argv) {
 
     if (optind < argc)
         fname = argv[optind];
-#else
-    if (argc > 1)
-      fname = argv[1];
-#endif
 
     info("Starting VM");
     mem_init();
