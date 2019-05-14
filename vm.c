@@ -9,6 +9,7 @@
 #include <assert.h>
 
 static int verbosity = 0;
+static int echo = 0;
 
 #define VERBOSITY_INFO 1<<1
 #define VERBOSITY_DEBUG 1<<2
@@ -364,6 +365,8 @@ int run() {
             break;
         case INP:
             ch = getchar();
+	    if (echo)
+		putchar(ch);
             assert(ch == EOF || ch <= 255);
             reg[C] = (ch == EOF ? 0xffffffff : (uint32_t)ch);
             break;
@@ -384,18 +387,17 @@ int run() {
 }
 
 int main(int argc, char** argv) {
-#if DEBUG
     int opt;
-    while ((opt = getopt(argc, argv, "dvo")) != -1) {
+    while ((opt = getopt(argc, argv, "dve")) != -1) {
         switch (opt) {
         case 'd': verbosity |= VERBOSITY_DEBUG; break;
         case 'v': verbosity |= VERBOSITY_INFO; break;
+        case 'e': echo = 1; break;
         default:
-            printf("Usage: %s [-d] [-v] [-o] [file]\n", argv[0]);
+            printf("Usage: %s [-d] [-v] [-e] [file]\n", argv[0]);
             exit(EXIT_FAILURE);
         }
     }
-#endif
 
     const char* fname = "sandmark.umz";
     if (optind < argc)
