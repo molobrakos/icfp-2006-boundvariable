@@ -38,7 +38,7 @@ codex.um: vm codex.umz key
 	./vm codex.umz < key | dd skip=195 iflag=skip_bytes > $@
 
 .PHONT: basic
-basic: script/basic.script hack.bas vm codex.um
+basic: script/basic.script script/hack.bas vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: crack
