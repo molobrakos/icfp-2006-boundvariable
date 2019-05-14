@@ -1,0 +1,110 @@
+howie
+xyzzy
+
+# There is a bolt here. 
+# Underneath the bolt, there is a spring. 
+# Underneath the spring, there is a button. 
+# Underneath the button, there is a (broken) processor. 
+# Underneath the processor, there is a red pill. 
+# Underneath the pill, there is a (broken) radio. 
+# Underneath the radio, there is a cache. 
+# Underneath the cache, there is a blue transistor. 
+# Underneath the transistor, there is an antenna. 
+# Underneath the antenna, there is a screw. 
+# Underneath the screw, there is a (broken) motherboard. 
+# Underneath the motherboard, there is a (broken) A-1920-IXB. 
+# Underneath the A-1920-IXB, there is a red transistor. 
+# Underneath the transistor, there is a (broken) keypad. 
+# Underneath the keypad, there is some trash. 
+
+cat README
+adventure
+
+look
+examine manifesto
+examine pamphlet
+north
+
+take bolt
+take spring
+incinerate spring
+
+take button
+take processor
+
+take pill
+incinerate pill
+
+take radio
+
+# ADVTR.INC=5@999999|f95731ab88952dfa4cb326fb99c085f
+
+take cache
+combine processor and cache
+
+# ADVTR.CMB=5@999999|764e8a851411c66106e130374d8abbb
+
+take blue transistor
+take antenna
+incinerate antenna
+
+combine radio and blue transistor
+examine radio
+
+take screw
+take motherboard
+combine motherboard and screw
+
+take A-1920-IXB
+combine A-1920-IXB and processor
+examine A-1920-IXB
+
+take red transistor
+
+combine A-1920-IXB and radio
+combine A-1920-IXB and bolt
+combine A-1920-IXB and red transistor
+combine motherboard and A-1920-IXB
+
+take keypad
+combine keypad and motherboard
+combine keypad and button
+
+use keypad
+examine keypad
+
+take trash
+inv
+examine trash
+examine keypad
+incinerate trash
+
+south
+use keypad
+# ADVTR.KEY=20@999999|36995486a5be3bd747d778916846d2d
+
+incinerate keypad
+
+look
+examine /etc/passwd
+take /etc/passwd
+incinerate /etc/passwd
+
+examine note
+take note
+incinerate note
+
+take downloader
+examine downloader
+
+east
+
+take X-9247-GWE
+take F-1403-QDS
+take P-5065-WQO
+examine P-5065-WQO
+
+east
+examine textbook
+
+look
