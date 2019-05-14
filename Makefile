@@ -38,7 +38,7 @@ codex.um: vm codex.umz key
 	./vm codex.umz < key | dd skip=195 iflag=skip_bytes > $@
 
 .PHONT: basic
-basic: basic.script hack.bas vm codex.um
+basic: script/basic.script hack.bas vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: crack
@@ -46,19 +46,19 @@ crack:
 	make basic | grep "^!!! cracked"
 
 .PHONY: adventure
-adventure: adventure.script vm codex.um
+adventure: script/adventure.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: adventure
-2d: 2d.script vm codex.um
+2d: script/2d.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: certify
-certify: certify.script vm codex.um
+certify: script/certify.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: advice
-advise: advise.script vm codex.um
+advise: script/advise.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: solve
