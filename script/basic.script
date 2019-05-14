@@ -13,7 +13,7 @@ cd code
 cat hack.bas
 rm hack.bas
 /bin/umodem hack.bas STOP
-#include hack.bas
+#include script/hack.bas
 STOP
 /bin/qbasic hack.bas
 # INTRO.QBC=10@999999|e6ee9c98b80b4dd04814a29a37bcba8
