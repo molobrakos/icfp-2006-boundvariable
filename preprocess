@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- mode: python -*-
+# very simple preprocessor
+# support comments and (recursive) inclusion of files
 
 import sys
 import re
 
-COMMENT = re.compile("#") 
-INCLUDE = re.compile("#@include (?P<filename>\S*)")
+COMMENT = re.compile("#|$")
+INCLUDE = re.compile("#include (?P<filename>\S*)")
 
 def preprocess(f):
     for line in f:
