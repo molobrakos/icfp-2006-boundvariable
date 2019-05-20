@@ -5,7 +5,7 @@ ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 VM = ./vm -e codex.um
 PREPROCESS = ./preprocess
 
-TASKS=adventure 2d certify advise basic
+TASKS=basic adventure 2d certify advise
 
 .PHONY: default
 default: solve
