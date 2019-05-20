@@ -10,10 +10,10 @@
 #include <getopt.h>
 
 static int verbosity = 0;
-static int echo = 0;
 
-#define VERBOSITY_INFO 1<<1
-#define VERBOSITY_DEBUG 1<<2
+#define VERBOSITY_INFO  1<<0
+#define VERBOSITY_DEBUG 1<<1
+#define VERBOSITY_ECHO  1<<2
 
 inline static void info(const char* format, ...) {
     if (!(verbosity & VERBOSITY_INFO))
@@ -366,7 +366,7 @@ int run() {
             break;
         case INP:
             ch = getchar();
-	    if (echo)
+	    if (verbosity & VERBOSITY_ECHO)
 		putchar(ch);
             assert(ch == EOF || ch <= 255);
             reg[C] = (ch == EOF ? 0xffffffff : (uint32_t)ch);
@@ -394,7 +394,7 @@ int main(int argc, char** argv) {
         switch (opt) {
         case 'd': verbosity |= VERBOSITY_DEBUG; break;
         case 'v': verbosity |= VERBOSITY_INFO; break;
-        case 'e': echo = 1; break;
+        case 'e': verbosity |= VERBOSITY_ECHO; break;
         default:
             printf("Usage: %s [-d] [-v] [-e] [file]\n", argv[0]);
             exit(EXIT_FAILURE);
