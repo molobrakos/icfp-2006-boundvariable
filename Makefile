@@ -20,7 +20,7 @@ clean:
 	rm -f vm vmd *.out *.um *~
 
 .PHONY: realclean
-ealclean: clean
+realclean: clean
 	rm -f $(ASSETS)
 
 sandmark.out: sandmark.umz vm
