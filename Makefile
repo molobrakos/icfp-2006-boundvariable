@@ -5,6 +5,7 @@ ASSETS = umspec.txt codex.umz sandmark.umz um.um sandmark-output.txt
 VM = ./vm -e codex.um
 PREPROCESS = ./preprocess
 
+TASKS=adventure 2d certify advise basic
 
 .PHONY: default
 default: solve
@@ -37,32 +38,19 @@ vmd: vm.c
 codex.um: vm codex.umz key
 	./vm codex.umz < key | dd skip=195 iflag=skip_bytes > $@
 
-.PHONT: basic
-basic: script/basic.script script/hack.bas vm codex.um
-	cat $< | $(PREPROCESS) | $(VM)
-
 .PHONY: crack
 crack:
 	make basic | grep "^!!! cracked"
 
-.PHONY: adventure
-adventure: script/adventure.script vm codex.um
-	cat $< | $(PREPROCESS) | $(VM)
+.PHONY: basic
+basic: script/hack.bas
 
-.PHONY: adventure
-2d: script/2d.script vm codex.um
-	cat $< | $(PREPROCESS) | $(VM)
-
-.PHONY: certify
-certify: script/certify.script vm codex.um
-	cat $< | $(PREPROCESS) | $(VM)
-
-.PHONY: advice
-advise: script/advise.script vm codex.um
+.PHONY: $(TASKS)
+$(TASKS): % : script/%.script vm codex.um
 	cat $< | $(PREPROCESS) | $(VM)
 
 .PHONY: solve
-solve: basic adventure 2d certify advise
+solve: $(TASKS)
 
 .PHONY: cookies
 cookies:
