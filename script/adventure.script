@@ -81,11 +81,13 @@ incinerate trash
 
 south
 use keypad
+
 # ADVTR.KEY=20@999999|36995486a5be3bd747d778916846d2d
 
 incinerate keypad
 
 look
+
 examine /etc/passwd
 take /etc/passwd
 incinerate /etc/passwd
@@ -93,6 +95,14 @@ incinerate /etc/passwd
 examine note
 take note
 incinerate note
+
+look
+
+examine downloader
+examine uploader
+
+exit
+
 
 take downloader
 examine downloader
