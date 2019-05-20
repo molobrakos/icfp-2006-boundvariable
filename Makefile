@@ -7,6 +7,8 @@ PREPROCESS = ./preprocess
 
 TASKS=basic adventure 2d certify advise
 
+COOKIEPATTERN="\w\{5\}\.\w\{3\}="
+
 .PHONY: default
 default: solve
 
@@ -54,7 +56,7 @@ solve: $(TASKS)
 
 .PHONY: cookies
 cookies:
-	make | grep '\w\{5\}\.\w\{3\}='
+	make | grep $(COOKIEPATTERN)
 
 .PHONY: run
 run:
